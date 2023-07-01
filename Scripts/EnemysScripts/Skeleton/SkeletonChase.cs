@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkeletonChase : StateMachineBehaviour
@@ -12,11 +10,17 @@ public class SkeletonChase : StateMachineBehaviour
     private Rigidbody2D _rigidbody2D;
     private Enemy _enemy;
 
+    private int _animatorAttackHash;
+    private int _animatorInVisionHash;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _rigidbody2D = animator.GetComponent<Rigidbody2D>();
         _enemy = animator.GetComponent<Enemy>();
         _target = _enemy.GetTarget();
+
+        _animatorAttackHash = Animator.StringToHash("Attack");
+        _animatorInVisionHash = Animator.StringToHash("InVision");
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,17 +36,17 @@ public class SkeletonChase : StateMachineBehaviour
 
         if (Vector2.Distance(_target.transform.position, _rigidbody2D.position) <= _attackRange)
         {
-            animator.SetTrigger("Attack");
+            animator.SetTrigger(_animatorAttackHash);
         }
 
         if (Vector2.Distance(_target.transform.position, _rigidbody2D.position) >= _chaseRange)
         {
-            animator.SetBool("InVision", false);
+            animator.SetBool(_animatorInVisionHash, false);
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.ResetTrigger("Attack");
+        animator.ResetTrigger(_animatorAttackHash);
     }
 }

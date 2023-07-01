@@ -12,11 +12,14 @@ public class Skeleton : StateMachineBehaviour
     private Rigidbody2D _rigidBody2D;
     private int _currentPoint = 0;
 
+    private int _animaatorInVisionHash;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _enemy = animator.GetComponent<Enemy>();
         _patrolPoints = _enemy.GetPatrolPoints();
         _rigidBody2D = animator.GetComponent<Rigidbody2D>();
+        _animaatorInVisionHash = Animator.StringToHash("InVision");
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -51,7 +54,7 @@ public class Skeleton : StateMachineBehaviour
 
         if (hit.collider != null)
         {
-            animator.SetBool("InVision", true);
+            animator.SetBool(_animaatorInVisionHash, true);
         }
 
         Debug.DrawRay(_enemy.transform.position, lookSide * _detectRange, Color.red);

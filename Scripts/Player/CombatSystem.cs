@@ -23,6 +23,10 @@ public class CombatSystem : MonoBehaviour
     private float _comboCount;
 
     private Player _player;
+    private int _animatorFirstAttackHash;
+    private int _animatorSecondAttackHash;
+    private int _animatorThirdAttackHash;
+    private int _animatorIsBlockedHash;
 
     public event UnityAction<int, int> StaminaChanged;
 
@@ -30,6 +34,11 @@ public class CombatSystem : MonoBehaviour
     {
         _player = GetComponent<Player>();
         _currentStamina = _maxStamina;
+
+        _animatorFirstAttackHash = Animator.StringToHash("Attack1");
+        _animatorSecondAttackHash = Animator.StringToHash("Attack2");
+        _animatorThirdAttackHash = Animator.StringToHash("Attack3");
+        _animatorIsBlockedHash = Animator.StringToHash("isBlocked");
     }
 
     private void FixedUpdate()
@@ -46,25 +55,24 @@ public class CombatSystem : MonoBehaviour
     public void BlockState(bool state)
     {
         _player.IsBlocked = state;
-        _player.PlayerAnimator.SetBool("isBlocked", state);
+        _player.PlayerAnimator.SetBool(_animatorIsBlockedHash, state);
     }
 
     public void AttackState()
     {
         if (_minDelayBetweenAttack <= _timeBetweenAttack && _comboCount == 0)
-            Attack(1, "Attack1");
+            Attack(1, _animatorFirstAttackHash);
 
         else if (_minDelayBetweenAttack <= _timeBetweenAttack && _comboCount == 1)
-            Attack(2, "Attack2");
+            Attack(2, _animatorSecondAttackHash);
 
         else if (_minDelayBetweenAttack <= _timeBetweenAttack && _comboCount == 2)
-            Attack(3, "Attack3");
-        
+            Attack(3, _animatorThirdAttackHash);
     }
 
-    private void Attack(int attackModifire, string attackName)
+    private void Attack(int attackModifire, int animatorHash)
     {
-        _player.PlayerAnimator.SetTrigger(attackName);
+        _player.PlayerAnimator.SetTrigger(animatorHash);
         _currentStamina -= _staminaPerAttack;
 
         if (_currentStamina <= 0)

@@ -25,23 +25,33 @@ public class Enemy : MonoBehaviour
     private int _currentHealth;
     private Vector2 _lookside = Vector2.right;
 
+    private int _animatorHurtHash;
+    private int _animatorIsAliveHash;
+    private int _animatorIsReadyHash;
+    private int _animatorDieHash;
+
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _animator.SetBool("IsAlive", true);
         _currentHealth = _health;
-    }
+
+        _animatorHurtHash = Animator.StringToHash("Hurt");
+        _animatorIsAliveHash = Animator.StringToHash("IsAlive");
+        _animatorIsReadyHash = Animator.StringToHash("IsReady");
+        _animatorDieHash = Animator.StringToHash("Die");
+}
 
     public void TakeDamage(int damage)
     {
         Debug.Log("I Hurt");
-        _animator.SetTrigger("Hurt");
+        _animator.SetTrigger(_animatorHurtHash);
         _currentHealth -= damage;
         HealthChanged?.Invoke(_currentHealth, _health);
 
         if (_currentHealth <= 0)
         {
-            _animator.SetBool("IsAlive", false);
+            _animator.SetBool(_animatorIsAliveHash, false);
             Dying?.Invoke();
             GetComponent<Collider2D>().enabled = false;
             GetComponent<Rigidbody2D>().isKinematic = true;
@@ -91,12 +101,12 @@ public class Enemy : MonoBehaviour
 
     public void SetReady()
     {
-        _animator.SetBool("IsReady", true);
+        _animator.SetBool(_animatorIsReadyHash, true);
     }
 
     private IEnumerator EnemyDying()
     {
-        _animator.SetTrigger("Die");
+        _animator.SetTrigger(_animatorDieHash);
         yield return new WaitForSeconds(3f);
         
         Destroy(gameObject);

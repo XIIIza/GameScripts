@@ -1,23 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Hunter : StateMachineBehaviour
 {
 
-    [SerializeField] float _speed = 2.5f;
-    [SerializeField] float attackRange = 1f;
+    [SerializeField] private float _speed = 2.5f;
+    [SerializeField] private float attackRange = 1f;
 
     private float _timeBetweenShoot;
     private Player _target;
     private Rigidbody2D _rigidbody2D;
     private Enemy _enemy;
 
+    private int _animatorAttackHash;
+    private int _animatorShootHash;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _rigidbody2D = animator.GetComponent<Rigidbody2D>();
         _enemy = animator.GetComponent<Enemy>();
         _target = _enemy.GetTarget();
+
+        _animatorAttackHash = Animator.StringToHash("Attack");
+        _animatorShootHash = Animator.StringToHash("Shoot");
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -35,19 +39,19 @@ public class Hunter : StateMachineBehaviour
 
         if (Vector2.Distance(_target.transform.position, _rigidbody2D.position) <= attackRange)
         {
-            animator.SetTrigger("Attack");
+            animator.SetTrigger(_animatorAttackHash);
         }
 
         if(_timeBetweenShoot >= 3)
         {
-            animator.SetTrigger("Shoot");
+            animator.SetTrigger(_animatorShootHash);
             _timeBetweenShoot = 0;
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.ResetTrigger("Attack");
-        animator.ResetTrigger("Shoot");
+        animator.ResetTrigger(_animatorAttackHash);
+        animator.ResetTrigger(_animatorShootHash);
     }
 }

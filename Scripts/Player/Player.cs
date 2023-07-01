@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,18 +16,23 @@ public class Player : MonoBehaviour
     public event UnityAction<int, int> HealthChanged;
     public event UnityAction Dying;
 
+    private int _animatorBlockedHash;
+    private int _animatorHurtHash;
+    private int _animatorDeadHash;
+
     private void Awake()
     {
         _currentHealth = _health;
         PlayerAnimator = GetComponent<Animator>();
+        _animatorBlockedHash = Animator.StringToHash("Blocked");
+        _animatorDeadHash = Animator.StringToHash("Dead");
+        _animatorHurtHash = Animator.StringToHash("Hurt");
     }
 
     public void ApplyDamage(int damage)
     {
         if (IsBlocked)
-        {
             PlayerAnimator.SetTrigger("Blocked");
-        }
 
         else
         { 

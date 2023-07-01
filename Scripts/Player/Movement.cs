@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
@@ -13,10 +12,17 @@ public class Movement : MonoBehaviour
     private Vector2 _direction;
     private Rigidbody2D _rigidBody2D;
 
+    private int _animatorIsGroundedHash;
+    private int _animatorSpeedHash;
+    private int _animatorJumpHash;
+
     private void Start()
     {
         _player = GetComponent<Player>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
+        _animatorIsGroundedHash = Animator.StringToHash("isGrounded");
+        _animatorJumpHash = Animator.StringToHash("Jump");
+        _animatorSpeedHash = Animator.StringToHash("Speed");
     }
 
     private void FixedUpdate()
@@ -24,14 +30,14 @@ public class Movement : MonoBehaviour
         if (DialogueManager.GetInstance().IsDialoguePlay || _player.IsBlocked)
         {
             _rigidBody2D.velocity = Vector2.zero;
-            _player.PlayerAnimator.SetFloat("Speed", Mathf.Abs(_direction.x));
+            _player.PlayerAnimator.SetFloat(_animatorSpeedHash, Mathf.Abs(_direction.x));
         }
         else
         {
             _player.IsGrounded = Physics2D.OverlapCircle(_groundCheck.transform.position, 0.1f, _groundLayer);
             _rigidBody2D.velocity = new Vector2(_direction.x * _moveSpeed, _rigidBody2D.velocity.y);
-            _player.PlayerAnimator.SetBool("isGrounded", _player.IsGrounded);
-            _player.PlayerAnimator.SetFloat("Speed", Mathf.Abs(_direction.x));
+            _player.PlayerAnimator.SetBool(_animatorIsGroundedHash, _player.IsGrounded);
+            _player.PlayerAnimator.SetFloat(_animatorSpeedHash, Mathf.Abs(_direction.x));
         }
     }
 
@@ -55,7 +61,7 @@ public class Movement : MonoBehaviour
         if (_player.IsGrounded)
         {
             _rigidBody2D.AddForce(transform.up * _jumpForce, ForceMode2D.Impulse);
-            _player.PlayerAnimator.SetTrigger("Jump");
+            _player.PlayerAnimator.SetTrigger(_animatorJumpHash);
         }
     }
 
