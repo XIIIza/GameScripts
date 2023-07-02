@@ -16,7 +16,7 @@ public class Door : InteractebleObjects
     {
         if (IsInteracteble && InRange)
         {
-            _visualCue.SetActive(true);
+            VisualCue.SetActive(true);
             if (InputManager.GetInstance().GetInteractPressed())
             {
                 _sceneLoader.enabled = true;
@@ -24,6 +24,6 @@ public class Door : InteractebleObjects
         }
 
         else
-            _visualCue.SetActive(false);
+            VisualCue.SetActive(false);
     }
 }

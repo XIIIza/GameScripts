@@ -9,9 +9,12 @@ public class LastSceneMinotaur : MonoBehaviour
     [SerializeField] private GameObject _endPointMove;
     [SerializeField] private Animator _animator;
 
+    private int _animatorIsRunHash;
+
     private void OnEnable()
     {
-        _animator.SetBool("IsRun", true);
+        _animatorIsRunHash = Animator.StringToHash("IsRun");
+        _animator.SetBool(_animatorIsRunHash, true);
         _minotaur.transform.DOMove(_endPointMove.transform.position, 3f);
     }
 
@@ -20,6 +23,6 @@ public class LastSceneMinotaur : MonoBehaviour
         if (_minotaur.transform.position != _endPointMove.transform.position)
             return;
         else
-            _animator.SetBool("IsRun", false);
+            _animator.SetBool(_animatorIsRunHash, false);
     }
 }

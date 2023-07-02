@@ -10,7 +10,7 @@ public class Lever : InteractebleObjects
     {
         if (IsInteracteble && InRange)
         {
-            _visualCue.SetActive(true);
+            VisualCue.SetActive(true);
             if (InputManager.GetInstance().GetInteractPressed())
             {
                 SpriteRenderer.sprite = SecondStateImage;
@@ -20,6 +20,6 @@ public class Lever : InteractebleObjects
         }
 
         else
-            _visualCue.SetActive(false);
+            VisualCue.SetActive(false);
     }
 }

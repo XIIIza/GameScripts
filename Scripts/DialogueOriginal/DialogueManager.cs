@@ -1,13 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Ink.Runtime;
-using UnityEngine.EventSystems;
  
 public class DialogueManager : MonoBehaviour 
 {
-
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI _dialogueText;
@@ -32,8 +29,6 @@ public class DialogueManager : MonoBehaviour
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
-
-
     private void Awake()
     {
         if (_instance != null)
@@ -55,9 +50,9 @@ public class DialogueManager : MonoBehaviour
     {
         IsDialoguePlay = false;
         dialoguePanel.SetActive(false);
-
-        _choicesText = new TextMeshProUGUI[_choices.Length];
         int index = 0;
+        _choicesText = new TextMeshProUGUI[_choices.Length];
+
         foreach (GameObject choice in _choices)
         {
             _choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
@@ -98,6 +93,7 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogWarning("Ink Variable was found to be null: " + variableName);
         }
+
         return variableValue;
     }
 
@@ -159,6 +155,7 @@ public class DialogueManager : MonoBehaviour
     private void DisplayChoices()
     {
         List<Choice> currentChoices = _currentStory.currentChoices;
+        int index = 0;
 
         if (currentChoices.Count > _choices.Length)
         {
@@ -166,14 +163,13 @@ public class DialogueManager : MonoBehaviour
                 + currentChoices.Count);
         }
 
-        int index = 0;
-
         foreach (Choice choice in currentChoices)
         {
             _choices[index].gameObject.SetActive(true);
             _choicesText[index].text = choice.text;
             index++;
         }
+
         for (int i = index; i < _choices.Length; i++)
         {
             _choices[i].gameObject.SetActive(false);

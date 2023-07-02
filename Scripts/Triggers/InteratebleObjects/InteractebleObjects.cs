@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class InteractebleObjects : MonoBehaviour
 {
-    [SerializeField] protected GameObject _visualCue;
+    [SerializeField] protected GameObject VisualCue;
     [SerializeField] protected Sprite FirstStateImage;
     [SerializeField] protected Sprite SecondStateImage;
-
     [SerializeField] protected bool IsInteracteble = false;
+
     protected bool InRange = false;
     protected SpriteRenderer SpriteRenderer;
 

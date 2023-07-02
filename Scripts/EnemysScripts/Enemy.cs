@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         _animator = GetComponent<Animator>();
-        _animator.SetBool("IsAlive", true);
+        _animator.SetBool(_animatorIsAliveHash, true);
         _currentHealth = _health;
 
         _animatorHurtHash = Animator.StringToHash("Hurt");
